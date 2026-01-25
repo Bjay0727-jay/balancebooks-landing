@@ -1308,11 +1308,26 @@
         // GitHub Release Auto-Detect
         async function loadLatestRelease() {
             const repo = 'Bjay0727-jay/balancebooks-pro';
-            const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
+            
+            // Hardcoded fallback URLs (update these when you release new versions)
+            const fallbackUrls = {
+                windows: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro.Setup.1.6.0.exe',
+                mac: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.dmg',
+                macArm: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0-arm64.dmg',
+                linux: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.AppImage'
+            };
             
             try {
-                const response = await fetch(apiUrl);
-                const release = await response.json();
+                // Try fetching all releases (works even without proper version tags)
+                const response = await fetch(`https://api.github.com/repos/${repo}/releases`);
+                const releases = await response.json();
+                
+                if (!releases || releases.length === 0 || releases.message) {
+                    throw new Error('No releases found');
+                }
+                
+                // Get the most recent release
+                const release = releases[0];
                 
                 // Display version
                 const versionDisplay = document.getElementById('version-display');
@@ -1323,13 +1338,16 @@
                 // Find assets by file extension
                 const assets = release.assets || [];
                 
+                if (assets.length === 0) {
+                    throw new Error('No assets in release');
+                }
+                
                 // Windows (.exe with Setup in name)
                 const windowsAsset = assets.find(a => a.name.endsWith('.exe') && a.name.toLowerCase().includes('setup'));
                 if (windowsAsset) {
                     const btn = document.getElementById('download-windows');
                     btn.href = windowsAsset.browser_download_url;
                     btn.textContent = `Download .exe`;
-                    btn.title = windowsAsset.name;
                 }
                 
                 // Mac Intel (.dmg without arm64)
@@ -1338,7 +1356,6 @@
                     const btn = document.getElementById('download-mac');
                     btn.href = macAsset.browser_download_url;
                     btn.textContent = `Download .dmg`;
-                    btn.title = macAsset.name;
                 }
                 
                 // Mac Apple Silicon (.dmg with arm64)
@@ -1347,9 +1364,7 @@
                     const btn = document.getElementById('download-mac-arm');
                     btn.href = macArmAsset.browser_download_url;
                     btn.textContent = `Download .dmg (Apple Silicon)`;
-                    btn.title = macArmAsset.name;
                 } else {
-                    // Hide arm button if no separate arm64 build
                     const armBtn = document.getElementById('download-mac-arm');
                     if (armBtn) armBtn.style.display = 'none';
                 }
@@ -1360,19 +1375,27 @@
                     const btn = document.getElementById('download-linux');
                     btn.href = linuxAsset.browser_download_url;
                     btn.textContent = `Download .AppImage`;
-                    btn.title = linuxAsset.name;
                 }
                 
                 console.log('✅ Release loaded:', release.tag_name, 'Assets:', assets.length);
                 
             } catch (error) {
-                console.error('Failed to load release:', error);
-                // Fallback to hardcoded links
-                document.getElementById('download-windows').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                console.error('API failed, using fallback links:', error);
+                
+                // Use hardcoded fallback links
+                document.getElementById('version-display').textContent = 'Latest Version: v1.6.0';
+                
+                document.getElementById('download-windows').href = fallbackUrls.windows;
                 document.getElementById('download-windows').textContent = 'Download .exe';
-                document.getElementById('download-mac').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                
+                document.getElementById('download-mac').href = fallbackUrls.mac;
                 document.getElementById('download-mac').textContent = 'Download .dmg';
-                document.getElementById('download-linux').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                
+                const armBtn = document.getElementById('download-mac-arm');
+                armBtn.href = fallbackUrls.macArm;
+                armBtn.textContent = 'Download .dmg (Apple Silicon)';
+                
+                document.getElementById('download-linux').href = fallbackUrls.linux;
                 document.getElementById('download-linux').textContent = 'Download .AppImage';
             }
         }
