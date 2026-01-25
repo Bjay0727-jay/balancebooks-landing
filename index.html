@@ -279,6 +279,18 @@
             box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
         }
         
+        .btn-outline {
+            background: transparent;
+            color: var(--teal);
+            border: 2px solid var(--teal);
+            padding: 10px 20px;
+        }
+        
+        .btn-outline:hover {
+            background: var(--teal);
+            color: white;
+        }
+        
         .hero-image {
             position: relative;
             animation: fadeInRight 0.8s ease 0.2s both;
@@ -1158,24 +1170,26 @@
         <div class="container download-content">
             <h2>Download for Your Platform</h2>
             <p>Install once, own forever. All platforms include the same powerful features.</p>
+            <p class="version-badge" id="version-display" style="margin-top: 8px; font-size: 14px; color: var(--teal); font-weight: 600;"></p>
             <div class="download-grid">
                 <div class="download-card">
                     <div class="download-card-icon">🪟</div>
                     <h4>Windows</h4>
                     <p>Windows 10/11 (64-bit)</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest" class="btn btn-teal" target="_blank">Download .exe</a>
+                    <a href="#" id="download-windows" class="btn btn-teal">Loading...</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🍎</div>
                     <h4>macOS</h4>
-                    <p>macOS 11+ (Universal)</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest" class="btn btn-teal" target="_blank">Download .dmg</a>
+                    <p>macOS 11+ (Intel & Apple Silicon)</p>
+                    <a href="#" id="download-mac" class="btn btn-teal">Loading...</a>
+                    <a href="#" id="download-mac-arm" class="btn btn-outline" style="margin-top: 8px; font-size: 12px;">Apple Silicon (M1/M2/M3)</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🐧</div>
                     <h4>Linux</h4>
-                    <p>Ubuntu/Debian (.deb)</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest" class="btn btn-teal" target="_blank">Download .deb</a>
+                    <p>Universal AppImage</p>
+                    <a href="#" id="download-linux" class="btn btn-teal">Loading...</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🌐</div>
@@ -1257,7 +1271,7 @@
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
                     <a href="#faq">FAQ</a>
-                    <a href="mailto:support@balancebooksapp.com">Support</a>
+                    <a href="/cdn-cgi/l/email-protection#dcafa9acacb3aea89cbebdb0bdb2bfb9beb3b3b7afbdacacf2bfb3b1">Support</a>
                 </div>
             </div>
             <div class="footer-copy">
@@ -1290,6 +1304,81 @@
                 }
             });
         });
+
+        // GitHub Release Auto-Detect
+        async function loadLatestRelease() {
+            const repo = 'Bjay0727-jay/balancebooks-pro';
+            const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const release = await response.json();
+                
+                // Display version
+                const versionDisplay = document.getElementById('version-display');
+                if (versionDisplay && release.tag_name) {
+                    versionDisplay.textContent = `Latest Version: ${release.tag_name}`;
+                }
+                
+                // Find assets by file extension
+                const assets = release.assets || [];
+                
+                // Windows (.exe with Setup in name)
+                const windowsAsset = assets.find(a => a.name.endsWith('.exe') && a.name.toLowerCase().includes('setup'));
+                if (windowsAsset) {
+                    const btn = document.getElementById('download-windows');
+                    btn.href = windowsAsset.browser_download_url;
+                    btn.textContent = `Download .exe`;
+                    btn.title = windowsAsset.name;
+                }
+                
+                // Mac Intel (.dmg without arm64)
+                const macAsset = assets.find(a => a.name.endsWith('.dmg') && !a.name.includes('arm64'));
+                if (macAsset) {
+                    const btn = document.getElementById('download-mac');
+                    btn.href = macAsset.browser_download_url;
+                    btn.textContent = `Download .dmg`;
+                    btn.title = macAsset.name;
+                }
+                
+                // Mac Apple Silicon (.dmg with arm64)
+                const macArmAsset = assets.find(a => a.name.endsWith('.dmg') && a.name.includes('arm64'));
+                if (macArmAsset) {
+                    const btn = document.getElementById('download-mac-arm');
+                    btn.href = macArmAsset.browser_download_url;
+                    btn.textContent = `Download .dmg (Apple Silicon)`;
+                    btn.title = macArmAsset.name;
+                } else {
+                    // Hide arm button if no separate arm64 build
+                    const armBtn = document.getElementById('download-mac-arm');
+                    if (armBtn) armBtn.style.display = 'none';
+                }
+                
+                // Linux (.AppImage)
+                const linuxAsset = assets.find(a => a.name.endsWith('.AppImage'));
+                if (linuxAsset) {
+                    const btn = document.getElementById('download-linux');
+                    btn.href = linuxAsset.browser_download_url;
+                    btn.textContent = `Download .AppImage`;
+                    btn.title = linuxAsset.name;
+                }
+                
+                console.log('✅ Release loaded:', release.tag_name, 'Assets:', assets.length);
+                
+            } catch (error) {
+                console.error('Failed to load release:', error);
+                // Fallback to hardcoded links
+                document.getElementById('download-windows').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                document.getElementById('download-windows').textContent = 'Download .exe';
+                document.getElementById('download-mac').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                document.getElementById('download-mac').textContent = 'Download .dmg';
+                document.getElementById('download-linux').href = 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/latest';
+                document.getElementById('download-linux').textContent = 'Download .AppImage';
+            }
+        }
+        
+        // Load release on page load
+        loadLatestRelease();
     </script>
 </body>
 </html>
