@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download BalanceBooks Pro - Free Personal Finance App</title>
+    <meta name="description" content="Download BalanceBooks Pro for Windows, Mac, Linux or use instantly in your browser. Free personal finance app with 100% privacy.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="logo-icon.svg">
+    <link rel="apple-touch-icon" href="icon-512x512.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --navy-dark: #0f172a;
+            --navy: #1e3a5f;
+            --teal: #14b8a6;
+            --teal-dark: #0d9488;
+            --light-gray: #64748b;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--navy-dark);
+            color: var(--white);
+            line-height: 1.6;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo img { height: 40px; width: 40px; }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .logo-text span { color: var(--teal); }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover { color: var(--white); }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px 80px;
+            background: linear-gradient(180deg, var(--navy-dark) 0%, var(--navy) 100%);
+        }
+        
+        .hero-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--light-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: var(--teal);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+        
+        .download-section {
+            max-width: 1200px;
+            margin: -40px auto 0;
+            padding: 0 20px 80px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .download-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 8px;
+        }
+        
+        .card-desc {
+            color: var(--light-gray);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .card-features {
+            text-align: left;
+            margin-bottom: 24px;
+            padding-left: 20px;
+        }
+        
+        .card-features li {
+            color: var(--navy);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .download-btn {
+            display: block;
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+        
+        .download-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        
+        .download-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--teal);
+            color: var(--teal-dark);
+            margin-top: 10px;
+        }
+        
+        .download-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .file-info {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--light-gray);
+        }
+        
+        .mobile-section {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .mobile-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .mobile-section > p {
+            color: var(--light-gray);
+            margin-bottom: 40px;
+        }
+        
+        .mobile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .mobile-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 32px;
+        }
+        
+        .mobile-card .icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+        
+        .mobile-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .mobile-card p {
+            color: var(--light-gray);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .features-section {
+            padding: 80px 20px;
+            background: var(--white);
+        }
+        
+        .features-section h2 {
+            text-align: center;
+            font-size: 32px;
+            color: var(--navy-dark);
+            margin-bottom: 48px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 24px;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+        
+        .feature h3 {
+            color: var(--navy-dark);
+            margin-bottom: 8px;
+        }
+        
+        .feature p {
+            color: var(--light-gray);
+            font-size: 14px;
+        }
+        
+        footer {
+            background: var(--navy-dark);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        footer p {
+            color: var(--light-gray);
+            font-size: 14px;
+        }
+        
+        footer a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 32px; }
+            .download-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="logo">
+            <img src="logo-icon.svg" alt="BalanceBooks Pro">
+            <span class="logo-text">Balance<span>Books</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="./">Home</a>
+            <a href="./install-guide.html">Install Guide</a>
+            <a href="./docs/USER_MANUAL.html">Documentation</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <svg class="hero-logo" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="navyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1e3a5f" />
+                    <stop offset="100%" style="stop-color:#0f172a" />
+                </linearGradient>
+                <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#14b8a6" />
+                    <stop offset="100%" style="stop-color:#0d9488" />
+                </linearGradient>
+            </defs>
+            <path d="M 50 5 L 92 18 L 92 55 C 92 78 73 92 50 98 C 27 92 8 78 8 55 L 8 18 Z" fill="url(#navyGrad)"/>
+            <path d="M 50 14 L 82 24 L 82 54 C 82 72 67 83 50 88 C 33 83 18 72 18 54 L 18 24 Z" fill="none" stroke="url(#tealGrad)" stroke-width="3"/>
+            <circle cx="50" cy="52" r="24" fill="url(#tealGrad)"/>
+            <path d="M 36 52 L 46 62 L 66 42" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1>Download <span>BalanceBooks Pro</span></h1>
+        <p>Choose your platform and start managing your finances in minutes. Free forever, no account required.</p>
+        <div class="version-badge" id="version-badge">Latest: v1.7.0</div>
+    </section>
+
+    <section class="download-section">
+        <div class="download-grid">
+            <!-- Web App -->
+            <div class="download-card">
+                <div class="card-icon">🌐</div>
+                <h3 class="card-title">Web App</h3>
+                <p class="card-desc">Use instantly in your browser. No download needed.</p>
+                <ul class="card-features">
+                    <li>Works on any device</li>
+                    <li>Always up to date</li>
+                    <li>No installation needed</li>
+                    <li>Full offline support</li>
+                </ul>
+                <a href="https://app.balancebooksapp.com" class="download-btn">Launch Web App →</a>
+                <p class="file-info">Opens in new tab • Works offline</p>
+            </div>
+            
+            <!-- Windows -->
+            <div class="download-card">
+                <div class="card-icon">🪟</div>
+                <h3 class="card-title">Windows</h3>
+                <p class="card-desc">Desktop app for Windows 10 and 11.</p>
+                <ul class="card-features">
+                    <li>Native Windows experience</li>
+                    <li>Works completely offline</li>
+                    <li>Auto-updates</li>
+                    <li>Taskbar integration</li>
+                </ul>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro.Setup.1.7.0.exe" class="download-btn" id="download-windows">Download for Windows</a>
+                <p class="file-info">~75 MB • Windows 10/11</p>
+            </div>
+            
+            <!-- Mac -->
+            <div class="download-card">
+                <div class="card-icon">🍎</div>
+                <h3 class="card-title">macOS</h3>
+                <p class="card-desc">Desktop app for macOS 10.15 and later.</p>
+                <ul class="card-features">
+                    <li>Native Mac experience</li>
+                    <li>Works completely offline</li>
+                    <li>Touch Bar support</li>
+                    <li>Dock integration</li>
+                </ul>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0.dmg" class="download-btn" id="download-mac-intel">Download for Mac (Intel)</a>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0-arm64.dmg" class="download-btn secondary" id="download-mac-arm">Download for Mac (Apple Silicon)</a>
+                <p class="file-info">~90 MB • macOS 10.15+</p>
+            </div>
+            
+            <!-- Linux -->
+            <div class="download-card">
+                <div class="card-icon">🐧</div>
+                <h3 class="card-title">Linux</h3>
+                <p class="card-desc">Desktop app for Linux distributions.</p>
+                <ul class="card-features">
+                    <li>AppImage format</li>
+                    <li>Works completely offline</li>
+                    <li>No installation needed</li>
+                    <li>Run on any distro</li>
+                </ul>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0.AppImage" class="download-btn" id="download-linux">Download for Linux</a>
+                <p class="file-info">~102 MB • AppImage</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="mobile-section">
+        <h2>📱 Mobile Apps</h2>
+        <p>Install BalanceBooks Pro on your phone or tablet for a native app experience!</p>
+        <div class="mobile-grid">
+            <div class="mobile-card">
+                <div class="icon">🍎</div>
+                <h3>iPhone & iPad</h3>
+                <p>Open the Web App in <strong>Safari</strong>, tap <strong>Share</strong>, then <strong>"Add to Home Screen"</strong></p>
+            </div>
+            <div class="mobile-card">
+                <div class="icon">🤖</div>
+                <h3>Android</h3>
+                <p>Open the Web App in <strong>Chrome</strong>, tap <strong>Menu (⋮)</strong>, then <strong>"Install App"</strong></p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features-section">
+        <h2>Why BalanceBooks Pro?</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>100% Private</h3>
+                <p>Your data never leaves your device. No accounts, no cloud, no tracking.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <h3>Completely Free</h3>
+                <p>No subscriptions, no ads, no in-app purchases. Free forever.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📴</div>
+                <h3>Works Offline</h3>
+                <p>Full functionality without internet. Your finances, always accessible.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast & Simple</h3>
+                <p>Clean interface, no bloat. Get started in seconds.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="./docs/PRIVACY_POLICY.md">Privacy Policy</a>
+            <a href="./install-guide.html">Installation Guide</a>
+            <a href="./docs/USER_MANUAL.html">Documentation</a>
+            <a href="./">Home</a>
+        </div>
+        <p>© 2025 BalanceBooks Pro. Your finances, your device, your privacy.</p>
+    </footer>
+
+    <script>
+        // GitHub repository info
+        const GITHUB_OWNER = 'Bjay0727-jay';
+        const GITHUB_REPO = 'balancebooks-pro';
+        
+        // Current version (update this when releasing new versions)
+        const CURRENT_VERSION = '1.7.0';
+        
+        // Fetch latest release from GitHub API
+        async function fetchLatestRelease() {
+            try {
+                // Try fetching the latest release first
+                let response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`);
+                
+                if (!response.ok) {
+                    // If no "latest" release, try fetching all releases
+                    response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases`);
+                    if (!response.ok) throw new Error('Failed to fetch releases');
+                    
+                    const releases = await response.json();
+                    if (releases.length > 0) {
+                        updateDownloadLinks(releases[0]);
+                        return;
+                    }
+                    throw new Error('No releases found');
+                }
+                
+                const release = await response.json();
+                updateDownloadLinks(release);
+            } catch (error) {
+                console.log('Using default download links (API unavailable or rate limited)');
+                // Links already work via HTML defaults - no action needed
+            }
+        }
+        
+        function updateDownloadLinks(release) {
+            // Extract version from tag (handles both "v1.7.0" and "main" formats)
+            let version = release.tag_name;
+            if (version.startsWith('v')) {
+                version = version.substring(1);
+            }
+            
+            // Update version badge if we got a valid version
+            const badge = document.getElementById('version-badge');
+            if (badge && version && version !== 'main') {
+                badge.textContent = `Latest: v${version}`;
+            }
+            
+            const assets = release.assets || [];
+            
+            // Find download URLs from assets
+            assets.forEach(asset => {
+                const name = asset.name.toLowerCase();
+                const url = asset.browser_download_url;
+                
+                if (name.includes('setup') && name.endsWith('.exe')) {
+                    updateButton('download-windows', url, 'Download for Windows');
+                } else if (name.endsWith('.dmg') && name.includes('arm64')) {
+                    updateButton('download-mac-arm', url, 'Download for Mac (Apple Silicon)');
+                } else if (name.endsWith('.dmg') && !name.includes('arm64')) {
+                    updateButton('download-mac-intel', url, 'Download for Mac (Intel)');
+                } else if (name.endsWith('.appimage')) {
+                    updateButton('download-linux', url, 'Download for Linux');
+                }
+            });
+        }
+        
+        function updateButton(id, url, text) {
+            const btn = document.getElementById(id);
+            if (btn && url) {
+                btn.href = url;
+                btn.textContent = text;
+                btn.classList.remove('loading');
+            }
+        }
+        
+        // Fetch on page load (enhances default links if API available)
+        fetchLatestRelease();
+    </script>
+</body>
+</html>
