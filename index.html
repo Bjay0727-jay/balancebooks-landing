@@ -1003,7 +1003,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <div class="hero-badge">Now Available v1.6.0</div>
+                    <div class="hero-badge">Now Available v1.7.1</div>
                     <h1>Your Finances,<br><span>Your Device,</span><br>Your Privacy.</h1>
                     <p class="hero-subtitle">Take control of your money without compromising your data. BalanceBooks Pro keeps everything local — no cloud, no subscriptions, no strangers seeing your finances.</p>
                     <div class="hero-ctas">
@@ -1170,26 +1170,26 @@
         <div class="container download-content">
             <h2>Download for Your Platform</h2>
             <p>Install once, own forever. All platforms include the same powerful features.</p>
-            <p class="version-badge" style="margin-top: 8px; font-size: 14px; color: var(--teal); font-weight: 600;">Latest Version: v1.6.0</p>
+            <p class="version-badge" style="margin-top: 8px; font-size: 14px; color: var(--teal); font-weight: 600;">Latest Version: v1.7.1</p>
             <div class="download-grid">
                 <div class="download-card">
                     <div class="download-card-icon">🪟</div>
                     <h4>Windows</h4>
                     <p>Windows 10/11 (64-bit)</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro.Setup.1.6.0.exe" class="btn btn-teal">Download .exe</a>
+                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro.Setup.1.7.0.exe" class="btn btn-teal">Download .exe</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🍎</div>
                     <h4>macOS</h4>
                     <p>macOS 11+ (Intel & Apple Silicon)</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.dmg" class="btn btn-teal">Download .dmg (Intel)</a>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0-arm64.dmg" class="btn btn-outline" style="margin-top: 8px; font-size: 12px;">Download .dmg (Apple Silicon)</a>
+                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.dmg" class="btn btn-teal">Download .dmg (Intel)</a>
+                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0-arm64.dmg" class="btn btn-outline" style="margin-top: 8px; font-size: 12px;">Download .dmg (Apple Silicon)</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🐧</div>
                     <h4>Linux</h4>
                     <p>Universal AppImage</p>
-                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.AppImage" class="btn btn-teal">Download .AppImage</a>
+                    <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.AppImage" class="btn btn-teal">Download .AppImage</a>
                 </div>
                 <div class="download-card">
                     <div class="download-card-icon">🌐</div>
@@ -1311,10 +1311,10 @@
             
             // Hardcoded fallback URLs (update these when you release new versions)
             const fallbackUrls = {
-                windows: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro.Setup.1.6.0.exe',
-                mac: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.dmg',
-                macArm: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0-arm64.dmg',
-                linux: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.6.0.AppImage'
+                windows: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro.Setup.1.7.0.exe',
+                mac: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.dmg',
+                macArm: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0-arm64.dmg',
+                linux: 'https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.AppImage'
             };
             
             try {
@@ -1383,7 +1383,7 @@
                 console.error('API failed, using fallback links:', error);
                 
                 // Use hardcoded fallback links
-                document.getElementById('version-display').textContent = 'Latest Version: v1.6.0';
+                document.getElementById('version-display').textContent = 'Latest Version: v1.7.1';
                 
                 document.getElementById('download-windows').href = fallbackUrls.windows;
                 document.getElementById('download-windows').textContent = 'Download .exe';
