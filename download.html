@@ -358,7 +358,7 @@
         </svg>
         <h1>Download <span>BalanceBooks Pro</span></h1>
         <p>Choose your platform and start managing your finances in minutes. Free forever, no account required.</p>
-        <div class="version-badge" id="version-badge">Latest: v1.7.0</div>
+        <div class="version-badge" id="version-badge">Latest: v1.7.1</div>
     </section>
 
     <section class="download-section">
@@ -389,7 +389,7 @@
                     <li>Auto-updates</li>
                     <li>Taskbar integration</li>
                 </ul>
-                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro.Setup.1.7.0.exe" class="download-btn" id="download-windows">Download for Windows</a>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro.Setup.1.7.0.exe" class="download-btn" id="download-windows">Download for Windows</a>
                 <p class="file-info">~75 MB • Windows 10/11</p>
             </div>
             
@@ -404,8 +404,8 @@
                     <li>Touch Bar support</li>
                     <li>Dock integration</li>
                 </ul>
-                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0.dmg" class="download-btn" id="download-mac-intel">Download for Mac (Intel)</a>
-                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0-arm64.dmg" class="download-btn secondary" id="download-mac-arm">Download for Mac (Apple Silicon)</a>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.dmg" class="download-btn" id="download-mac-intel">Download for Mac (Intel)</a>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0-arm64.dmg" class="download-btn secondary" id="download-mac-arm">Download for Mac (Apple Silicon)</a>
                 <p class="file-info">~90 MB • macOS 10.15+</p>
             </div>
             
@@ -420,7 +420,7 @@
                     <li>No installation needed</li>
                     <li>Run on any distro</li>
                 </ul>
-                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/main/Balance.Books.Pro-1.7.0.AppImage" class="download-btn" id="download-linux">Download for Linux</a>
+                <a href="https://github.com/Bjay0727-jay/balancebooks-pro/releases/download/v1.7.1/Balance.Books.Pro-1.7.0.AppImage" class="download-btn" id="download-linux">Download for Linux</a>
                 <p class="file-info">~102 MB • AppImage</p>
             </div>
         </div>
@@ -485,7 +485,7 @@
         const GITHUB_REPO = 'balancebooks-pro';
         
         // Current version (update this when releasing new versions)
-        const CURRENT_VERSION = '1.7.0';
+        const CURRENT_VERSION = '1.7.1';
         
         // Fetch latest release from GitHub API
         async function fetchLatestRelease() {
@@ -515,7 +515,7 @@
         }
         
         function updateDownloadLinks(release) {
-            // Extract version from tag (handles both "v1.7.0" and "main" formats)
+            // Extract version from tag (handles both "v1.7.1" and "main" formats)
             let version = release.tag_name;
             if (version.startsWith('v')) {
                 version = version.substring(1);
