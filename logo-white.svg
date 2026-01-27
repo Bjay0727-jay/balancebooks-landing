@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <!-- Shield shape -->
+  <g transform="translate(8, 5)">
+    <path d="M 42 5 L 75 15 L 75 45 C 75 65 60 80 42 88 C 24 80 9 65 9 45 L 9 15 Z" fill="white"/>
+    
+    <!-- Inner shield cutout -->
+    <path d="M 42 12 L 68 20 L 68 44 C 68 60 56 72 42 78 C 28 72 16 60 16 44 L 16 20 Z" fill="none" stroke="white" stroke-width="2" opacity="0.5"/>
+    
+    <!-- Checkmark circle -->
+    <circle cx="42" cy="42" r="18" fill="white" opacity="0.3"/>
+    <path d="M 32 42 L 39 49 L 54 34" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="48" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="800" fill="white" letter-spacing="-1">
+    BalanceBooks
+  </text>
+  
+  <!-- PRO badge -->
+  <rect x="335" y="28" width="50" height="26" rx="5" fill="white" opacity="0.2"/>
+  <text x="360" y="47" font-family="system-ui, sans-serif" font-size="14" font-weight="800" fill="white" text-anchor="middle">PRO</text>
+  
+  <!-- Tagline -->
+  <text x="100" y="72" font-family="system-ui, sans-serif" font-size="13" fill="white" opacity="0.7" letter-spacing="2">
+    SECURE PERSONAL FINANCE
+  </text>
+</svg>
