@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BalanceBooks - Privacy-First Financial Software</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --navy-dark: #0a1628;
+            --navy: #0f2035;
+            --navy-light: #1a3550;
+            --teal: #14b8a6;
+            --teal-dark: #0d9488;
+            --teal-light: #5eead4;
+            --teal-bg: #f0fdfa;
+            --teal-bg-dark: #ccfbf1;
+            --amber: #fbbf24;
+            --amber-dark: #f59e0b;
+            --amber-light: #fcd34d;
+            --amber-bg: #fffbeb;
+            --amber-bg-dark: #fef3c7;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; line-height: 1.2; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+        .container-wide { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
+
+        /* Navigation */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 20px 0; transition: all 0.3s ease;
+        }
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+        .nav-logo svg { width: 52px; height: 52px; }
+        .nav-logo span { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; color: var(--navy-dark); letter-spacing: -0.5px; }
+        .nav-links { display: flex; align-items: center; gap: 40px; }
+        .nav-links a { text-decoration: none; color: var(--gray-600); font-weight: 600; font-size: 17px; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--teal); }
+        .nav-cta { background: var(--teal); color: white !important; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 17px; }
+        .nav-cta:hover { background: var(--teal-dark); }
+
+        /* Hero */
+        .hero {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, var(--teal-bg) 0%, var(--teal-bg-dark) 50%, var(--amber-bg) 100%);
+        }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 40px; align-items: center; }
+        .hero-left { display: flex; flex-direction: column; gap: 16px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--teal); color: white; padding: 6px 14px;
+            border-radius: 100px; font-size: 13px; font-weight: 600; width: fit-content;
+        }
+        .hero-center { text-align: center; }
+        .hero-center h1 { font-size: 52px; color: var(--navy-dark); margin-bottom: 20px; }
+        .hero-center p { font-size: 18px; color: var(--gray-600); max-width: 500px; margin: 0 auto 32px; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+            border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none;
+            transition: all 0.2s; border: none; cursor: pointer;
+        }
+        .btn-teal { background: var(--teal); color: white; box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4); }
+        .btn-teal:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(20, 184, 166, 0.5); }
+        .btn-amber { background: var(--amber); color: var(--navy-dark); box-shadow: 0 4px 14px rgba(251, 191, 36, 0.4); }
+        .btn-amber:hover { background: var(--amber-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5); }
+        .btn-outline { background: transparent; border: 2px solid var(--gray-300); color: var(--gray-700); }
+        .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+        .hero-right { display: flex; flex-direction: column; gap: 16px; align-items: flex-end; }
+        .hero-stat { background: white; border-radius: 12px; padding: 16px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: right; border-left: 4px solid var(--teal); }
+        .hero-stat.amber { border-left-color: var(--amber); }
+        .hero-stat-value { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 800; color: var(--teal); }
+        .hero-stat.amber .hero-stat-value { color: var(--amber-dark); }
+        .hero-stat-label { font-size: 13px; color: var(--gray-500); }
+
+        /* Sections */
+        .section { padding: 70px 0; }
+        .section-lg { padding: 90px 0; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+        .section-badge-teal { background: rgba(20, 184, 166, 0.15); color: var(--teal-dark); }
+        .section-badge-amber { background: rgba(251, 191, 36, 0.25); color: var(--amber-dark); }
+        .section-title { font-size: 42px; color: var(--navy-dark); margin-bottom: 16px; }
+        .section-subtitle { font-size: 18px; color: var(--gray-500); max-width: 600px; margin: 0 auto; }
+
+        /* Pro Intro */
+        .pro-intro { background: linear-gradient(180deg, var(--teal-bg) 0%, var(--teal-bg-dark) 100%); }
+        .pro-intro-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; align-items: center; }
+        .pro-intro-main h2 { font-size: 36px; color: var(--navy-dark); margin-bottom: 16px; }
+        .pro-intro-main p { color: var(--gray-600); font-size: 16px; margin-bottom: 24px; }
+        .pro-intro-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(20, 184, 166, 0.1); text-align: center; border: 2px solid var(--teal-bg-dark); transition: all 0.2s; }
+        .pro-intro-card:hover { border-color: var(--teal); transform: translateY(-4px); }
+        .pro-intro-card-icon { font-size: 32px; margin-bottom: 12px; }
+        .pro-intro-card h4 { font-size: 16px; color: var(--navy-dark); margin-bottom: 8px; }
+        .pro-intro-card p { font-size: 13px; color: var(--gray-500); }
+
+        /* Pro Dashboard */
+        .pro-dashboard { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); color: white; }
+        .pro-dashboard .section-title { color: white; }
+        .pro-dashboard .section-subtitle { color: rgba(255, 255, 255, 0.8); }
+        .pro-dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+        .dashboard-stat-card { background: rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 20px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s; }
+        .dashboard-stat-card:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-4px); }
+        .dashboard-stat-card .icon { font-size: 24px; margin-bottom: 8px; }
+        .dashboard-stat-card .value { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: white; }
+        .dashboard-stat-card .value.positive { color: white; }
+        .dashboard-stat-card .value.negative { color: white; }
+        .dashboard-stat-card .label { font-size: 12px; color: white; margin-top: 4px; }
+        .dashboard-preview { background: rgba(0, 0, 0, 0.2); border-radius: 20px; padding: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .dashboard-preview-card { background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; backdrop-filter: blur(10px); }
+        .dashboard-preview-card h5 { color: rgba(255, 255, 255, 0.8); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .dashboard-preview-card .amount { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; color: white; }
+        .dashboard-preview-card .trend { font-size: 12px; margin-top: 8px; color: white; }
+        .dashboard-preview-card .trend.up { color: white; }
+        .dashboard-preview-card .trend.down { color: white; }
+
+        /* Pro Features */
+        .pro-features { background: linear-gradient(180deg, var(--teal-bg-dark) 0%, var(--teal-bg) 100%); }
+        .features-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .feature-card-compact { background: white; border-radius: 16px; padding: 24px 16px; text-align: center; border: 2px solid var(--teal-bg-dark); transition: all 0.2s; }
+        .feature-card-compact:hover { border-color: var(--teal); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(20, 184, 166, 0.2); }
+        .feature-card-compact .icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--teal-bg) 0%, var(--teal-bg-dark) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; }
+        .feature-card-compact h4 { font-size: 14px; color: var(--navy-dark); margin-bottom: 6px; }
+        .feature-card-compact p { font-size: 12px; color: var(--gray-500); line-height: 1.4; }
+
+        /* Pro Categories */
+        .pro-categories { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%); color: white; }
+        .pro-categories .section-title { color: white; }
+        .pro-categories .section-subtitle { color: var(--gray-400); }
+        .categories-grid-8 { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; }
+        .category-pill { background: rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; cursor: pointer; }
+        .category-pill:hover { border-color: var(--teal); background: rgba(20, 184, 166, 0.15); }
+        .category-pill .emoji { font-size: 24px; margin-bottom: 8px; }
+        .category-pill .name { font-size: 11px; font-weight: 600; color: var(--gray-300); }
+
+        /* Pro Pricing */
+        .pro-pricing { background: linear-gradient(180deg, var(--teal-bg) 0%, var(--teal-bg-dark) 100%); }
+        .pricing-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px; margin: 0 auto; }
+        .pricing-card { background: white; border-radius: 24px; padding: 40px 32px; border: 2px solid var(--teal); position: relative; transition: all 0.2s; }
+        .pricing-card:hover { transform: translateY(-4px); }
+        .pricing-card.featured { border-color: var(--teal); box-shadow: 0 8px 40px rgba(20, 184, 166, 0.25); background: linear-gradient(180deg, white 0%, var(--teal-bg) 100%); }
+        .pricing-card.featured::before { content: '65% OFF'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); color: white; padding: 6px 20px; border-radius: 100px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4); }
+        .pricing-card h4 { font-size: 22px; color: var(--navy-dark); margin-bottom: 8px; }
+        .pricing-card .price { font-family: 'Inter', sans-serif; font-size: 56px; font-weight: 800; color: var(--teal); }
+        .pricing-card .price span { font-size: 18px; color: var(--gray-500); font-family: 'Inter', sans-serif; font-weight: 500; }
+        .pricing-card .original-price { font-size: 16px; color: var(--gray-400); text-decoration: line-through; margin-bottom: 20px; }
+        .pricing-card ul { list-style: none; margin: 24px 0; }
+        .pricing-card ul li { display: flex; align-items: center; gap: 10px; padding: 10px 0; font-size: 15px; color: var(--gray-600); }
+        .pricing-card ul li::before { content: '✓'; color: var(--teal); font-weight: 700; font-size: 16px; }
+
+        /* Pro CTA */
+        .pro-cta { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--teal-dark) 100%); color: white; }
+        .pro-cta-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; align-items: center; }
+        .pro-cta-main h2 { font-size: 36px; margin-bottom: 16px; }
+        .pro-cta-main p { font-size: 18px; opacity: 0.9; margin-bottom: 24px; }
+        .pro-cta-stat { background: rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        .pro-cta-stat .value { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 800; color: var(--teal-light); }
+        .pro-cta-stat .label { font-size: 14px; opacity: 0.8; }
+
+        /* Trucking Intro */
+        .trucking-intro { background: linear-gradient(135deg, var(--amber-bg) 0%, var(--amber-bg-dark) 100%); }
+        .trucking-intro-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; align-items: center; }
+        .trucking-intro-main h2 { font-size: 36px; color: var(--navy-dark); margin-bottom: 16px; }
+        .trucking-intro-main p { color: var(--gray-600); font-size: 16px; margin-bottom: 24px; }
+        .trucking-intro-card { background: white; border-radius: 16px; padding: 24px; text-align: center; border: 2px solid var(--amber-bg-dark); box-shadow: 0 4px 20px rgba(251, 191, 36, 0.1); transition: all 0.2s; }
+        .trucking-intro-card:hover { border-color: var(--amber); transform: translateY(-4px); }
+        .trucking-intro-card-icon { font-size: 32px; margin-bottom: 12px; }
+        .trucking-intro-card h4 { font-size: 16px; color: var(--navy-dark); margin-bottom: 8px; }
+        .trucking-intro-card p { font-size: 13px; color: var(--gray-500); }
+
+        /* Trucking Dashboard */
+        .trucking-dashboard { background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%); color: var(--navy-dark); }
+        .trucking-dashboard .section-title { color: var(--navy-dark); }
+        .trucking-dashboard .section-subtitle { color: rgba(15, 32, 53, 0.7); }
+        .trucking-dashboard .section-badge-amber { background: rgba(15, 32, 53, 0.15); color: var(--navy-dark); }
+        .trucking-metrics-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+        .trucking-metric-card { background: rgba(255, 255, 255, 0.3); border-radius: 16px; padding: 20px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.4); transition: all 0.2s; }
+        .trucking-metric-card:hover { background: rgba(255, 255, 255, 0.5); transform: translateY(-4px); }
+        .trucking-metric-card .icon { font-size: 24px; margin-bottom: 8px; }
+        .trucking-metric-card .value { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: var(--navy-dark); }
+        .trucking-metric-card .label { font-size: 12px; color: rgba(15, 32, 53, 0.7); margin-top: 4px; }
+        .trucking-route-strip { background: rgba(15, 32, 53, 0.15); border-radius: 16px; padding: 24px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; align-items: center; }
+        .route-point { text-align: center; }
+        .route-point .city { font-weight: 700; font-size: 16px; color: var(--navy-dark); }
+        .route-point .state { font-size: 13px; color: rgba(15, 32, 53, 0.6); }
+        .route-arrow { text-align: center; color: var(--navy-dark); font-size: 24px; }
+        .route-stat { text-align: center; background: rgba(255, 255, 255, 0.4); border-radius: 12px; padding: 12px; }
+        .route-stat .value { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--navy-dark); }
+        .route-stat .label { font-size: 10px; color: rgba(15, 32, 53, 0.6); text-transform: uppercase; font-weight: 600; }
+
+        /* Trucking Features */
+        .trucking-features { background: linear-gradient(180deg, var(--navy-dark) 0%, var(--navy) 100%); color: white; }
+        .trucking-features .section-title { color: white; }
+        .trucking-features .section-subtitle { color: var(--gray-400); }
+        .trucking-features-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .trucking-feature-card { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 24px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; }
+        .trucking-feature-card:hover { border-color: var(--amber); background: rgba(251, 191, 36, 0.1); transform: translateY(-4px); }
+        .trucking-feature-card .icon { width: 48px; height: 48px; background: rgba(251, 191, 36, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; }
+        .trucking-feature-card h4 { font-size: 14px; margin-bottom: 6px; }
+        .trucking-feature-card p { font-size: 12px; color: var(--gray-400); line-height: 1.4; }
+
+        /* Trucking Tools */
+        .trucking-tools { background: linear-gradient(180deg, var(--amber-bg) 0%, var(--amber-bg-dark) 100%); }
+        .tools-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .tool-card { background: white; border-radius: 16px; padding: 24px; text-align: center; border: 2px solid var(--amber-bg-dark); transition: all 0.2s; text-decoration: none; color: var(--navy-dark); position: relative; }
+        .tool-card::before { content: 'FREE'; position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%); color: var(--navy-dark); padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+        .tool-card:hover { border-color: var(--amber); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(251, 191, 36, 0.25); }
+        .tool-card .icon { font-size: 32px; margin-bottom: 12px; }
+        .tool-card h4 { font-size: 14px; margin-bottom: 6px; color: var(--navy-dark); }
+        .tool-card p { font-size: 12px; color: var(--gray-500); }
+
+        /* Trucking Pricing */
+        .trucking-pricing { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%); color: white; }
+        .trucking-pricing .section-title { color: white; }
+        .trucking-pricing .section-subtitle { color: var(--gray-400); }
+        .trucking-pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px; margin: 0 auto; }
+        .trucking-pricing-card { background: rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 40px 32px; border: 2px solid var(--amber); position: relative; transition: all 0.2s; }
+        .trucking-pricing-card:hover { transform: translateY(-4px); }
+        .trucking-pricing-card.featured { border-color: var(--amber); box-shadow: 0 8px 40px rgba(251, 191, 36, 0.25); background: linear-gradient(180deg, rgba(251, 191, 36, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%); }
+        .trucking-pricing-card.featured::before { content: '65% OFF'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%); color: var(--navy-dark); padding: 6px 20px; border-radius: 100px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4); }
+        .trucking-pricing-card h4 { font-size: 22px; margin-bottom: 8px; }
+        .trucking-pricing-card .price { font-family: 'Inter', sans-serif; font-size: 56px; font-weight: 800; color: var(--amber); }
+        .trucking-pricing-card .price span { font-size: 18px; color: var(--gray-400); font-family: 'Inter', sans-serif; font-weight: 500; }
+        .trucking-pricing-card .original-price { font-size: 16px; color: var(--gray-500); text-decoration: line-through; margin-bottom: 20px; }
+        .trucking-pricing-card ul { list-style: none; margin: 24px 0; }
+        .trucking-pricing-card ul li { display: flex; align-items: center; gap: 10px; padding: 10px 0; font-size: 15px; color: var(--gray-300); }
+        .trucking-pricing-card ul li::before { content: '✓'; color: var(--amber); font-weight: 700; font-size: 16px; }
+
+        /* Trucking CTA */
+        .trucking-cta { background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 50%, var(--amber) 100%); color: var(--navy-dark); }
+        .trucking-cta-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; align-items: center; }
+        .trucking-cta-main h2 { font-size: 36px; margin-bottom: 16px; }
+        .trucking-cta-main p { font-size: 18px; opacity: 0.8; margin-bottom: 24px; }
+        .trucking-cta-stat { background: rgba(255, 255, 255, 0.35); border-radius: 16px; padding: 24px; text-align: center; backdrop-filter: blur(10px); }
+        .trucking-cta-stat .value { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 800; color: var(--navy-dark); }
+        .trucking-cta-stat .label { font-size: 14px; opacity: 0.8; }
+
+        /* Footer */
+        .footer { background: linear-gradient(180deg, var(--navy-dark) 0%, #050d18 100%); color: white; padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { color: var(--gray-400); font-size: 14px; margin-top: 16px; max-width: 300px; }
+        .footer-links h4 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: white; }
+        .footer-links a { display: block; color: var(--gray-400); text-decoration: none; font-size: 14px; padding: 6px 0; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--teal); }
+        .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--gray-500); }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-grid { grid-template-columns: 1fr 2fr 1fr; }
+            .features-grid-6, .trucking-features-grid, .tools-grid-6 { grid-template-columns: repeat(3, 1fr); }
+            .categories-grid-8 { grid-template-columns: repeat(4, 1fr); }
+            .pro-dashboard-grid, .trucking-metrics-grid { grid-template-columns: repeat(3, 1fr); }
+            .dashboard-preview { grid-template-columns: repeat(2, 1fr); }
+            .trucking-route-strip { grid-template-columns: repeat(3, 1fr); }
+            .pro-intro-grid, .trucking-intro-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-left, .hero-right { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+            .pro-cta-grid, .trucking-cta-grid { grid-template-columns: 1fr 1fr; }
+            .pro-cta-main, .trucking-cta-main { grid-column: span 2; text-align: center; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 120px 0 60px; }
+            .hero-center h1 { font-size: 32px; }
+            .section-title { font-size: 28px; }
+            .section, .section-lg { padding: 50px 0; }
+            .features-grid-6, .trucking-features-grid, .tools-grid-6 { grid-template-columns: repeat(2, 1fr); }
+            .categories-grid-8 { grid-template-columns: repeat(4, 1fr); }
+            .pricing-grid-2, .trucking-pricing-grid { grid-template-columns: 1fr; }
+            .pro-intro-grid, .trucking-intro-grid { grid-template-columns: 1fr; }
+            .pro-cta-grid, .trucking-cta-grid { grid-template-columns: 1fr; }
+            .pro-cta-main, .trucking-cta-main { grid-column: span 1; }
+            .pro-dashboard-grid, .trucking-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .dashboard-preview { grid-template-columns: 1fr; }
+            .trucking-route-strip { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="nav-logo">
+                    <svg viewBox="0 0 100 100" fill="none">
+                        <defs>
+                            <linearGradient id="navNavyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1e3a5f"/>
+                                <stop offset="100%" style="stop-color:#0f172a"/>
+                            </linearGradient>
+                            <linearGradient id="navTealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#14b8a6"/>
+                                <stop offset="100%" style="stop-color:#0d9488"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M 50 5 L 92 18 L 92 55 C 92 78 73 92 50 98 C 27 92 8 78 8 55 L 8 18 Z" fill="url(#navNavyGrad)"/>
+                        <path d="M 50 14 L 82 24 L 82 54 C 82 72 67 83 50 88 C 33 83 18 72 18 54 L 18 24 Z" fill="none" stroke="url(#navTealGrad)" stroke-width="3"/>
+                        <circle cx="50" cy="52" r="24" fill="url(#navTealGrad)"/>
+                        <path d="M 36 52 L 46 62 L 66 42" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>BalanceBooks</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#pro">Pro</a>
+                    <a href="#trucking">Trucking</a>
+                    <a href="#tools">Free Tools</a>
+                    <a href="download.html" class="nav-cta">Download</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container-wide">
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <div class="hero-badge">🔒 Privacy-First</div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">100%</div>
+                        <div class="hero-stat-label">Offline Capable</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">$0</div>
+                        <div class="hero-stat-label">Monthly Fees</div>
+                    </div>
+                </div>
+                <div class="hero-center">
+                    <h1>Your Money.<br>Your Device.<br>Your Privacy.</h1>
+                    <p>Financial software that works offline, respects your privacy, and puts you in complete control of your data.</p>
+                    <div class="hero-buttons">
+                        <a href="#pro" class="btn btn-teal">Explore Pro →</a>
+                        <a href="#trucking" class="btn btn-amber">Trucking App →</a>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-stat amber">
+                        <div class="hero-stat-value">2</div>
+                        <div class="hero-stat-label">Specialized Apps</div>
+                    </div>
+                    <div class="hero-stat amber">
+                        <div class="hero-stat-value">6+</div>
+                        <div class="hero-stat-label">Free Tools</div>
+                    </div>
+                    <div class="hero-badge" style="background: var(--amber); color: var(--navy-dark);">🚀 65% Off Launch</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Intro -->
+    <section class="section pro-intro" id="pro">
+        <div class="container-wide">
+            <div class="pro-intro-grid">
+                <div class="pro-intro-main">
+                    <span class="section-badge section-badge-teal">💰 Personal Finance</span>
+                    <h2>BalanceBooks Pro</h2>
+                    <p>Complete personal finance management that works entirely on your device. Track spending, manage budgets, and build wealth—all without sharing your data.</p>
+                    <a href="download.html" class="btn btn-teal">Download Pro →</a>
+                </div>
+                <div class="pro-intro-card">
+                    <div class="pro-intro-card-icon">📊</div>
+                    <h4>Smart Budgets</h4>
+                    <p>AI-powered category budgets</p>
+                </div>
+                <div class="pro-intro-card">
+                    <div class="pro-intro-card-icon">🔄</div>
+                    <h4>Auto-Track</h4>
+                    <p>Recurring expense automation</p>
+                </div>
+                <div class="pro-intro-card">
+                    <div class="pro-intro-card-icon">📱</div>
+                    <h4>Multi-Platform</h4>
+                    <p>Windows, Mac, Linux</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Dashboard -->
+    <section class="section-lg pro-dashboard">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge section-badge-teal" style="background: rgba(255,255,255,0.2); color: white;">📈 Dashboard Preview</span>
+                <h2 class="section-title">See Your Finances at a Glance</h2>
+                <p class="section-subtitle">Real-time insights into your spending, savings, and financial health</p>
+            </div>
+            <div class="pro-dashboard-grid">
+                <div class="dashboard-stat-card"><div class="icon">💵</div><div class="value positive">$12,847</div><div class="label">Current Balance</div></div>
+                <div class="dashboard-stat-card"><div class="icon">📈</div><div class="value positive">$8,450</div><div class="label">Monthly Income</div></div>
+                <div class="dashboard-stat-card"><div class="icon">📉</div><div class="value negative">$6,234</div><div class="label">Monthly Expenses</div></div>
+                <div class="dashboard-stat-card"><div class="icon">🎯</div><div class="value positive">$2,216</div><div class="label">Net Savings</div></div>
+                <div class="dashboard-stat-card"><div class="icon">💳</div><div class="value">12</div><div class="label">Unpaid Bills</div></div>
+            </div>
+            <div class="dashboard-preview">
+                <div class="dashboard-preview-card"><h5>Beginning Balance</h5><div class="amount">$10,631</div><div class="trend up">↑ Carried from Dec</div></div>
+                <div class="dashboard-preview-card"><h5>Total Income</h5><div class="amount">$8,450</div><div class="trend up">↑ 12% vs last month</div></div>
+                <div class="dashboard-preview-card"><h5>Total Expenses</h5><div class="amount">$6,234</div><div class="trend down">↓ 8% vs last month</div></div>
+                <div class="dashboard-preview-card"><h5>Ending Balance</h5><div class="amount">$12,847</div><div class="trend up">↑ +$2,216 this month</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Features -->
+    <section class="section-lg pro-features">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge section-badge-teal">✨ Features</span>
+                <h2 class="section-title">Everything You Need</h2>
+                <p class="section-subtitle">Powerful tools to manage every aspect of your personal finances</p>
+            </div>
+            <div class="features-grid-6">
+                <div class="feature-card-compact"><div class="icon">📊</div><h4>Budget Tracking</h4><p>Set goals for each category</p></div>
+                <div class="feature-card-compact"><div class="icon">🔄</div><h4>Recurring Bills</h4><p>Never miss a payment</p></div>
+                <div class="feature-card-compact"><div class="icon">💡</div><h4>Smart Tips</h4><p>AI savings recommendations</p></div>
+                <div class="feature-card-compact"><div class="icon">💳</div><h4>Debt Payoff</h4><p>Snowball & avalanche</p></div>
+                <div class="feature-card-compact"><div class="icon">📥</div><h4>Easy Import</h4><p>CSV, Excel, bank exports</p></div>
+                <div class="feature-card-compact"><div class="icon">☁️</div><h4>Works Offline</h4><p>No internet required</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Categories -->
+    <section class="section pro-categories">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge" style="background: rgba(20, 184, 166, 0.2); color: var(--teal-light);">🏷️ Categories</span>
+                <h2 class="section-title">Track Every Dollar</h2>
+                <p class="section-subtitle">20+ built-in categories to organize your spending</p>
+            </div>
+            <div class="categories-grid-8">
+                <div class="category-pill"><div class="emoji">🏠</div><div class="name">Housing</div></div>
+                <div class="category-pill"><div class="emoji">🛒</div><div class="name">Groceries</div></div>
+                <div class="category-pill"><div class="emoji">🚗</div><div class="name">Transport</div></div>
+                <div class="category-pill"><div class="emoji">💡</div><div class="name">Utilities</div></div>
+                <div class="category-pill"><div class="emoji">🏥</div><div class="name">Healthcare</div></div>
+                <div class="category-pill"><div class="emoji">🎬</div><div class="name">Entertainment</div></div>
+                <div class="category-pill"><div class="emoji">💰</div><div class="name">Savings</div></div>
+                <div class="category-pill"><div class="emoji">📦</div><div class="name">+12 More</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Pricing -->
+    <section class="section-lg pro-pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge section-badge-teal">💎 Pricing</span>
+                <h2 class="section-title">Simple, Lifetime Pricing</h2>
+                <p class="section-subtitle">Pay once, use forever. No subscriptions.</p>
+            </div>
+            <div class="pricing-grid-2">
+                <div class="pricing-card featured">
+                    <h4>Founding Member</h4>
+                    <div class="price">$17 <span>lifetime</span></div>
+                    <div class="original-price">$49.99</div>
+                    <ul>
+                        <li>Desktop + Web app (Win/Mac/Linux)</li>
+                        <li>Priority support</li>
+                        <li>All future updates</li>
+                        <li>Early feature access</li>
+                        <li>Limited spots available</li>
+                    </ul>
+                    <a href="download.html" class="btn btn-teal" style="width: 100%;">Get 65% Off →</a>
+                </div>
+                <div class="pricing-card">
+                    <h4>Standard</h4>
+                    <div class="price">$49<span>.99</span></div>
+                    <p style="color: var(--gray-500); font-size: 14px; margin-bottom: 20px;">After beta ends</p>
+                    <ul>
+                        <li>Desktop + Web app (Win/Mac/Linux)</li>
+                        <li>Email support</li>
+                        <li>All future updates</li>
+                        <li>Full feature access</li>
+                    </ul>
+                    <a href="download.html" class="btn btn-outline" style="width: 100%;">Join Waitlist →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro CTA -->
+    <section class="section pro-cta">
+        <div class="container-wide">
+            <div class="pro-cta-grid">
+                <div class="pro-cta-main">
+                    <h2>Take Control of Your Finances Today</h2>
+                    <p>Join thousands of users who've switched to privacy-first personal finance management.</p>
+                    <div style="display: flex; gap: 16px;">
+                        <a href="download.html" class="btn" style="background: white; color: var(--teal);">Download Now</a>
+                        <a href="#pro" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: white;">Learn More</a>
+                    </div>
+                </div>
+                <div class="pro-cta-stat"><div class="value">40</div><div class="label">Founding Spots Left</div></div>
+                <div class="pro-cta-stat"><div class="value">65%</div><div class="label">Launch Discount</div></div>
+                <div class="pro-cta-stat"><div class="value">$17</div><div class="label">Lifetime Access</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking Intro -->
+    <section class="section trucking-intro" id="trucking">
+        <div class="container-wide">
+            <div class="trucking-intro-grid">
+                <div class="trucking-intro-main">
+                    <span class="section-badge section-badge-amber">🚛 Owner-Operators</span>
+                    <h2>BalanceBooks for Trucking</h2>
+                    <p>Purpose-built financial tools for independent truckers. IFTA reporting, cost-per-mile tracking, and load profitability—designed by truckers, for truckers.</p>
+                    <a href="download.html" class="btn btn-amber">Download Trucking →</a>
+                </div>
+                <div class="trucking-intro-card"><div class="trucking-intro-card-icon">📋</div><h4>IFTA Ready</h4><p>Quarterly reports in minutes</p></div>
+                <div class="trucking-intro-card"><div class="trucking-intro-card-icon">⛽</div><h4>Fuel Tracking</h4><p>Import from any fuel card</p></div>
+                <div class="trucking-intro-card"><div class="trucking-intro-card-icon">📈</div><h4>Profitability</h4><p>Know your real numbers</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking Dashboard -->
+    <section class="section-lg trucking-dashboard">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge section-badge-amber">📊 Dashboard Preview</span>
+                <h2 class="section-title">Your Trucking Business at a Glance</h2>
+                <p class="section-subtitle">Real-time metrics for owner-operators</p>
+            </div>
+            <div class="trucking-metrics-grid">
+                <div class="trucking-metric-card"><div class="icon">💰</div><div class="value">$1.82</div><div class="label">Cost Per Mile</div></div>
+                <div class="trucking-metric-card"><div class="icon">📈</div><div class="value">$2.45</div><div class="label">Revenue Per Mile</div></div>
+                <div class="trucking-metric-card"><div class="icon">🛣️</div><div class="value">28,450</div><div class="label">Miles This Quarter</div></div>
+                <div class="trucking-metric-card"><div class="icon">⛽</div><div class="value">4,215</div><div class="label">Gallons Purchased</div></div>
+                <div class="trucking-metric-card"><div class="icon">💵</div><div class="value">$17,923</div><div class="label">Net Profit</div></div>
+            </div>
+            <div class="trucking-route-strip">
+                <div class="route-point"><div class="city">Dallas</div><div class="state">Texas</div></div>
+                <div class="route-arrow">→</div>
+                <div class="route-point"><div class="city">Atlanta</div><div class="state">Georgia</div></div>
+                <div class="route-stat"><div class="value">782 mi</div><div class="label">Distance</div></div>
+                <div class="route-stat"><div class="value">$2,847</div><div class="label">Revenue</div></div>
+                <div class="route-stat"><div class="value">+$1,847</div><div class="label">Net Profit</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking Features -->
+    <section class="section-lg trucking-features">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge section-badge-amber">✨ Features</span>
+                <h2 class="section-title">Built for the Road</h2>
+                <p class="section-subtitle">Everything owner-operators need in one app</p>
+            </div>
+            <div class="trucking-features-grid">
+                <div class="trucking-feature-card"><div class="icon">📋</div><h4>IFTA Reporting</h4><p>Auto state mileage tracking</p></div>
+                <div class="trucking-feature-card"><div class="icon">💰</div><h4>Cost Per Mile</h4><p>True operating cost</p></div>
+                <div class="trucking-feature-card"><div class="icon">📊</div><h4>Load Profitability</h4><p>Analyze each load</p></div>
+                <div class="trucking-feature-card"><div class="icon">🍽️</div><h4>Per Diem Tracking</h4><p>Maximize deductions</p></div>
+                <div class="trucking-feature-card"><div class="icon">⛽</div><h4>Fuel Card Import</h4><p>Love's, Pilot, EFS</p></div>
+                <div class="trucking-feature-card"><div class="icon">☁️</div><h4>Works Offline</h4><p>No cell signal needed</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking Tools -->
+    <section class="section-lg trucking-tools" id="tools">
+        <div class="container-wide">
+            <div class="section-header">
+                <span class="section-badge section-badge-amber">🛠️ Free Tools</span>
+                <h2 class="section-title">Try Our Free Trucking Tools</h2>
+                <p class="section-subtitle">No signup required. Use them right now.</p>
+            </div>
+            <div class="tools-grid-6">
+                <a href="https://trucking.balancebooksapp.com/ifta-calculator" class="tool-card" target="_blank"><div class="icon">📋</div><h4>IFTA Calculator</h4><p>Calculate fuel taxes by state</p></a>
+                <a href="https://trucking.balancebooksapp.com/cost-per-mile" class="tool-card" target="_blank"><div class="icon">💰</div><h4>Cost Per Mile</h4><p>Know your operating costs</p></a>
+                <a href="https://trucking.balancebooksapp.com/load-calculator" class="tool-card" target="_blank"><div class="icon">📊</div><h4>Load Calculator</h4><p>Analyze load profitability</p></a>
+                <a href="https://trucking.balancebooksapp.com/per-diem" class="tool-card" target="_blank"><div class="icon">🍽️</div><h4>Per Diem Calculator</h4><p>Track meal deductions</p></a>
+                <a href="https://trucking.balancebooksapp.com/loves-converter" class="tool-card" target="_blank"><div class="icon">❤️</div><h4>Love's Converter</h4><p>Import fuel card data</p></a>
+                <a href="https://trucking.balancebooksapp.com/pilot-converter" class="tool-card" target="_blank"><div class="icon">✈️</div><h4>Pilot FJ Converter</h4><p>Import fuel card data</p></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking Pricing -->
+    <section class="section-lg trucking-pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge section-badge-amber">💎 Pricing</span>
+                <h2 class="section-title">Trucker-Friendly Pricing</h2>
+                <p class="section-subtitle">Pay once, use forever. Built for owner-operators.</p>
+            </div>
+            <div class="trucking-pricing-grid">
+                <div class="trucking-pricing-card featured">
+                    <h4>Founding Member</h4>
+                    <div class="price">$35 <span>lifetime</span></div>
+                    <div class="original-price">$99.00</div>
+                    <ul>
+                        <li>Desktop + Web app access</li>
+                        <li>IFTA quarterly reports</li>
+                        <li>Unlimited loads & trips</li>
+                        <li>Priority trucker support</li>
+                        <li>All future updates</li>
+                    </ul>
+                    <a href="download.html" class="btn btn-amber" style="width: 100%;">Get 65% Off →</a>
+                </div>
+                <div class="trucking-pricing-card">
+                    <h4>Standard</h4>
+                    <div class="price">$99 <span>lifetime</span></div>
+                    <p style="color: var(--gray-400); font-size: 14px; margin-bottom: 20px;">After Q2 launch</p>
+                    <ul>
+                        <li>Desktop + Web app access</li>
+                        <li>IFTA quarterly reports</li>
+                        <li>Unlimited loads & trips</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="download.html" class="btn btn-outline" style="width: 100%; border-color: var(--gray-500); color: var(--gray-300);">Join Waitlist →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trucking CTA -->
+    <section class="section trucking-cta">
+        <div class="container-wide">
+            <div class="trucking-cta-grid">
+                <div class="trucking-cta-main">
+                    <h2>Run Your Trucking Business Smarter</h2>
+                    <p>Join owner-operators who've simplified their finances with purpose-built tools.</p>
+                    <div style="display: flex; gap: 16px;">
+                        <a href="download.html" class="btn" style="background: var(--navy-dark); color: var(--amber);">Download Now</a>
+                        <a href="#tools" class="btn" style="background: transparent; border: 2px solid var(--navy-dark); color: var(--navy-dark);">Try Free Tools</a>
+                    </div>
+                </div>
+                <div class="trucking-cta-stat"><div class="value">Q2 2025</div><div class="label">Full Launch</div></div>
+                <div class="trucking-cta-stat"><div class="value">65%</div><div class="label">Launch Discount</div></div>
+                <div class="trucking-cta-stat"><div class="value">$35</div><div class="label">Lifetime Access</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-wide">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo" style="margin-bottom: 16px;">
+                        <svg viewBox="0 0 36 36" fill="none" width="36" height="36">
+                            <rect width="36" height="36" rx="8" fill="#14b8a6"/>
+                            <path d="M18 6L28 12V24L18 30L8 24V12L18 6Z" fill="#0f172a"/>
+                            <path d="M18 10L24 14V22L18 26L12 22V14L18 10Z" fill="#14b8a6"/>
+                            <circle cx="18" cy="18" r="3" fill="#0f172a"/>
+                        </svg>
+                        <span style="color: white;">BalanceBooks</span>
+                    </a>
+                    <p>Privacy-first financial software for personal finance and trucking professionals. Your data stays on your device.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Products</h4>
+                    <a href="#pro">BalanceBooks Pro</a>
+                    <a href="#trucking">Trucking App</a>
+                    <a href="#tools">Free Tools</a>
+                    <a href="download.html">Download</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Free Tools</h4>
+                    <a href="https://trucking.balancebooksapp.com/ifta-calculator" target="_blank">IFTA Calculator</a>
+                    <a href="https://trucking.balancebooksapp.com/cost-per-mile" target="_blank">Cost Per Mile</a>
+                    <a href="https://trucking.balancebooksapp.com/load-calculator" target="_blank">Load Calculator</a>
+                    <a href="https://trucking.balancebooksapp.com/per-diem" target="_blank">Per Diem</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 BalanceBooks. All rights reserved.</p>
+                <p>Made with ❤️ for privacy-conscious users</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+    </script>
+</body>
+</html>
