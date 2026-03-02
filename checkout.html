@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BalanceBooks — Secure Payment</title>
+    <meta name="description" content="Purchase BalanceBooks Pro (lifetime) or BalanceBooks Trucking (annual). Secure checkout powered by Stripe.">
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --navy: #0a1628;
+            --navy-mid: #12233d;
+            --teal: #00b4d8;
+            --teal-bright: #00d4ff;
+            --teal-dark: #0096b7;
+            --gold: #f0c040;
+            --gold-light: #ffd866;
+            --green: #10b981;
+            --green-light: #34d399;
+            --coral: #f97316;
+            --white: #ffffff;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --text-primary: #0f172a;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,.15);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-primary);
+            background: var(--gray-100);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* Nav */
+        .nav {
+            background: var(--navy);
+            padding: 16px 0;
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 20px; font-weight: 700; color: var(--white);
+        }
+        .nav-logo svg { width: 32px; height: 32px; }
+        .nav-back {
+            font-size: 14px; color: rgba(255,255,255,.7);
+            transition: color .2s;
+        }
+        .nav-back:hover { color: var(--teal-bright); }
+        .nav-secure {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; color: rgba(255,255,255,.5);
+        }
+
+        /* Main layout */
+        .checkout-container {
+            max-width: 1000px; margin: 0 auto; padding: 48px 24px 80px;
+        }
+        .checkout-header {
+            text-align: center; margin-bottom: 48px;
+        }
+        .checkout-header h1 {
+            font-size: 32px; font-weight: 700; margin-bottom: 8px;
+        }
+        .checkout-header p {
+            font-size: 16px; color: var(--gray-500);
+        }
+
+        /* Product selector */
+        .product-selector {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+            margin-bottom: 40px;
+        }
+        .product-option {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            cursor: pointer;
+            transition: all .25s ease;
+            position: relative;
+        }
+        .product-option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .product-option.selected--pro {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(0,180,216,.15), var(--shadow-md);
+        }
+        .product-option.selected--trucking {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(240,192,64,.15), var(--shadow-md);
+        }
+        .product-option-radio {
+            position: absolute; top: 20px; right: 20px;
+            width: 24px; height: 24px; border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s;
+        }
+        .product-option.selected--pro .product-option-radio {
+            border-color: var(--teal); background: var(--teal);
+        }
+        .product-option.selected--trucking .product-option-radio {
+            border-color: var(--gold); background: var(--gold);
+        }
+        .product-option-radio::after {
+            content: ''; width: 8px; height: 8px; border-radius: 50%;
+            background: var(--white); opacity: 0; transition: opacity .2s;
+        }
+        .product-option.selected--pro .product-option-radio::after,
+        .product-option.selected--trucking .product-option-radio::after { opacity: 1; }
+
+        .product-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 100px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+            margin-bottom: 16px;
+        }
+        .badge--pro { background: rgba(0,180,216,.1); color: var(--teal-dark); }
+        .badge--trucking { background: rgba(240,192,64,.12); color: #b8860b; }
+        .product-option-name {
+            font-size: 22px; font-weight: 700; margin-bottom: 6px;
+        }
+        .product-option-desc {
+            font-size: 14px; color: var(--gray-500); margin-bottom: 20px;
+        }
+        .product-option-pricing {
+            display: flex; align-items: baseline; gap: 8px;
+            margin-bottom: 4px;
+        }
+        .product-option-price {
+            font-size: 36px; font-weight: 700;
+        }
+        .product-option-period {
+            font-size: 14px; color: var(--gray-500);
+        }
+        .product-option-original {
+            font-size: 14px; color: var(--gray-400); text-decoration: line-through;
+            margin-bottom: 12px;
+        }
+        .product-option-savings {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; border-radius: 8px;
+            background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.15);
+            font-size: 13px; font-weight: 600; color: var(--green);
+        }
+        .product-option-features {
+            list-style: none; margin-top: 20px; padding-top: 20px;
+            border-top: 1px solid var(--gray-100);
+        }
+        .product-option-features li {
+            display: flex; align-items: center; gap: 8px;
+            padding: 5px 0; font-size: 13px; color: var(--gray-600);
+        }
+        .product-option-features li .check {
+            color: var(--green); font-size: 13px; flex-shrink: 0;
+        }
+
+        /* Order summary */
+        .order-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+        }
+        .order-section h2 {
+            font-size: 18px; font-weight: 700; margin-bottom: 20px;
+        }
+        .order-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0;
+            font-size: 15px;
+        }
+        .order-row + .order-row { border-top: 1px solid var(--gray-100); }
+        .order-row-label { color: var(--gray-600); }
+        .order-row-value { font-weight: 600; }
+        .order-row--total {
+            border-top: 2px solid var(--gray-200) !important;
+            font-size: 18px;
+        }
+        .order-row--total .order-row-value { font-size: 24px; font-weight: 700; }
+        .order-row--savings .order-row-value { color: var(--green); }
+
+        /* Checkout button */
+        .checkout-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 18px; border: none; border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 17px; font-weight: 700;
+            cursor: pointer; transition: all .25s;
+        }
+        .checkout-btn--pro {
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(0,180,216,.3);
+        }
+        .checkout-btn--pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,180,216,.4);
+        }
+        .checkout-btn--trucking {
+            background: linear-gradient(135deg, var(--gold) 0%, #d4a520 100%);
+            color: var(--navy);
+            box-shadow: 0 4px 20px rgba(240,192,64,.3);
+        }
+        .checkout-btn--trucking:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(240,192,64,.4);
+        }
+        .checkout-btn:disabled {
+            opacity: .6; cursor: not-allowed; transform: none !important;
+        }
+        .checkout-btn .spinner {
+            display: none; width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-top-color: var(--white);
+            border-radius: 50%; animation: spin .6s linear infinite;
+        }
+        .checkout-btn.loading .spinner { display: block; }
+        .checkout-btn.loading .btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Guarantee */
+        .guarantee-strip {
+            display: flex; align-items: center; justify-content: center; gap: 24px;
+            margin-top: 20px; flex-wrap: wrap;
+        }
+        .guarantee-item {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; color: var(--gray-500);
+        }
+        .guarantee-item .icon { font-size: 16px; }
+
+        /* Tax note */
+        .tax-note {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 16px; border-radius: 10px;
+            background: rgba(249,115,22,.06); border: 1px solid rgba(249,115,22,.12);
+            font-size: 13px; color: var(--coral); font-weight: 500;
+            margin-top: 16px;
+        }
+        .tax-note.hidden { display: none; }
+
+        /* Error */
+        .error-msg {
+            background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.15);
+            color: #dc2626; padding: 12px 16px; border-radius: 10px;
+            font-size: 14px; margin-bottom: 16px;
+            display: none;
+        }
+        .error-msg.show { display: block; }
+
+        /* Stripe config notice */
+        .config-notice {
+            background: rgba(0,180,216,.06); border: 1px solid rgba(0,180,216,.15);
+            border-radius: var(--radius-md); padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .config-notice h3 {
+            font-size: 15px; font-weight: 700; color: var(--teal-dark); margin-bottom: 8px;
+        }
+        .config-notice p {
+            font-size: 13px; color: var(--gray-600); line-height: 1.6;
+        }
+        .config-notice code {
+            background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Footer */
+        .checkout-footer {
+            text-align: center; padding: 40px 24px;
+            font-size: 12px; color: var(--gray-400);
+        }
+        .checkout-footer a { color: var(--gray-500); transition: color .2s; }
+        .checkout-footer a:hover { color: var(--teal); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-selector { grid-template-columns: 1fr; }
+            .checkout-header h1 { font-size: 26px; }
+            .product-option-price { font-size: 28px; }
+            .guarantee-strip { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M8 16h16M16 8v16M10 12h12M10 20h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#00b4d8"/><stop offset="1" stop-color="#0096b7"/></linearGradient></defs></svg>
+                BalanceBooks
+            </a>
+            <a href="index.html" class="nav-back">&larr; Back to site</a>
+            <span class="nav-secure">&#128274; Secure Checkout</span>
+        </div>
+    </nav>
+
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <h1>Choose your plan</h1>
+            <p>Select a product below and proceed to secure checkout powered by Stripe.</p>
+        </div>
+
+        <!-- Stripe setup notice (remove once Stripe keys are configured) -->
+        <div class="config-notice" id="config-notice">
+            <h3>Stripe Setup Required</h3>
+            <p>
+                To activate payments, replace the placeholder values in this file's <code>&lt;script&gt;</code> section:<br>
+                1. Set your <code>STRIPE_PUBLISHABLE_KEY</code> (from Stripe Dashboard &rarr; API keys)<br>
+                2. Set the <code>priceId</code> for each product (from Stripe Dashboard &rarr; Products &rarr; Price ID)<br>
+                3. Remove this notice block once configured.
+            </p>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-msg" id="error-msg"></div>
+
+        <!-- Product Selection -->
+        <div class="product-selector">
+            <!-- Pro -->
+            <div class="product-option selected--pro" id="option-pro" onclick="selectProduct('pro')">
+                <div class="product-option-radio"></div>
+                <span class="product-badge badge--pro">Lifetime License</span>
+                <div class="product-option-name">BalanceBooks Pro</div>
+                <div class="product-option-desc">Personal budgeting, expense tracking, Dropbox backup, Excel exports.</div>
+                <div class="product-option-pricing">
+                    <span class="product-option-price">$29.99</span>
+                    <span class="product-option-period">one-time</span>
+                </div>
+                <div class="product-option-original">$49.99 regular price</div>
+                <span class="product-option-savings">&#127881; Save 40% &mdash; Founding Member</span>
+                <ul class="product-option-features">
+                    <li><span class="check">&#10003;</span> All features + future updates forever</li>
+                    <li><span class="check">&#10003;</span> Windows, macOS, Linux + Web</li>
+                    <li><span class="check">&#10003;</span> Dropbox backup &amp; Excel export</li>
+                    <li><span class="check">&#10003;</span> Priority founding member support</li>
+                </ul>
+            </div>
+            <!-- Trucking -->
+            <div class="product-option" id="option-trucking" onclick="selectProduct('trucking')">
+                <div class="product-option-radio"></div>
+                <span class="product-badge badge--trucking">Annual Subscription</span>
+                <div class="product-option-name">BalanceBooks Trucking</div>
+                <div class="product-option-desc">IFTA reporting, cost-per-mile, load tracking, per diem management.</div>
+                <div class="product-option-pricing">
+                    <span class="product-option-price">$49.99</span>
+                    <span class="product-option-period">/year</span>
+                </div>
+                <div class="product-option-original">$79.99/yr regular price</div>
+                <span class="product-option-savings">&#127881; Save 37% &mdash; Founding Member</span>
+                <ul class="product-option-features">
+                    <li><span class="check">&#10003;</span> Everything in Pro, plus:</li>
+                    <li><span class="check">&#10003;</span> Full IFTA reporting &amp; jurisdiction tracking</li>
+                    <li><span class="check">&#10003;</span> Cost-per-mile &amp; load profitability</li>
+                    <li><span class="check">&#10003;</span> Per diem management (DOT rates)</li>
+                    <li><span class="check">&#10003;</span> Quarterly IFTA rate updates</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-section">
+            <h2>Order Summary</h2>
+            <div class="order-row">
+                <span class="order-row-label" id="summary-product">BalanceBooks Pro &mdash; Lifetime License</span>
+                <span class="order-row-value" id="summary-regular">$49.99</span>
+            </div>
+            <div class="order-row order-row--savings">
+                <span class="order-row-label">Founding Member Discount</span>
+                <span class="order-row-value" id="summary-discount">&minus;$20.00 (40%)</span>
+            </div>
+            <div class="order-row order-row--total">
+                <span class="order-row-label">Total</span>
+                <span class="order-row-value" id="summary-total">$29.99</span>
+            </div>
+            <div class="tax-note hidden" id="tax-note">
+                &#128206; Tax-Deductible &mdash; Write off 100% as a business operating expense
+            </div>
+        </div>
+
+        <!-- Checkout Button -->
+        <button class="checkout-btn checkout-btn--pro" id="checkout-btn" onclick="handleCheckout()">
+            <span class="spinner"></span>
+            <span class="btn-text" id="btn-text">Proceed to Secure Checkout &mdash; $29.99</span>
+        </button>
+
+        <!-- Guarantees -->
+        <div class="guarantee-strip">
+            <span class="guarantee-item"><span class="icon">&#128274;</span> 256-bit SSL encryption</span>
+            <span class="guarantee-item"><span class="icon">&#128179;</span> 30-day money-back guarantee</span>
+            <span class="guarantee-item"><span class="icon">&#9889;</span> Instant download after payment</span>
+            <span class="guarantee-item"><span class="icon">&#128737;&#65039;</span> Powered by Stripe</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="checkout-footer">
+        <p>
+            <a href="index.html">Home</a> &middot;
+            <a href="index.html#faq">FAQ</a> &middot;
+            <a href="#">Privacy Policy</a> &middot;
+            <a href="#">Terms of Service</a>
+        </p>
+        <p style="margin-top:8px">&copy; 2025 Forge Cyber Defense LLC. All rights reserved.</p>
+    </div>
+
+    <script>
+        // ============================================================
+        // STRIPE CONFIGURATION
+        // Replace these with your actual Stripe keys and price IDs
+        // ============================================================
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_XXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Stripe publishable key
+
+        const PRODUCTS = {
+            pro: {
+                name: 'BalanceBooks Pro',
+                subtitle: 'Lifetime License',
+                priceId: 'price_XXXXXXXXXXXXXXXX',     // Replace with Stripe Price ID for Pro ($29.99 one-time)
+                regularPrice: 49.99,
+                foundingPrice: 29.99,
+                discount: 40,
+                savings: 20.00,
+                period: 'one-time',
+                mode: 'payment',    // Stripe mode: 'payment' for one-time
+                btnClass: 'checkout-btn--pro',
+                taxDeductible: false
+            },
+            trucking: {
+                name: 'BalanceBooks Trucking',
+                subtitle: 'Annual Subscription',
+                priceId: 'price_XXXXXXXXXXXXXXXX',     // Replace with Stripe Price ID for Trucking ($49.99/yr)
+                regularPrice: 79.99,
+                foundingPrice: 49.99,
+                discount: 37,
+                savings: 30.00,
+                period: '/year',
+                mode: 'subscription', // Stripe mode: 'subscription' for recurring
+                btnClass: 'checkout-btn--trucking',
+                taxDeductible: true
+            }
+        };
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let selectedProduct = 'pro';
+
+        // Check URL params for pre-selection
+        const urlParams = new URLSearchParams(window.location.search);
+        const preselect = urlParams.get('product');
+        if (preselect && PRODUCTS[preselect]) {
+            selectedProduct = preselect;
+        }
+
+        // ============================================================
+        // UI FUNCTIONS
+        // ============================================================
+        function selectProduct(product) {
+            selectedProduct = product;
+            const optionPro = document.getElementById('option-pro');
+            const optionTrucking = document.getElementById('option-trucking');
+
+            // Reset both
+            optionPro.classList.remove('selected--pro');
+            optionTrucking.classList.remove('selected--trucking');
+
+            // Select the chosen one
+            if (product === 'pro') {
+                optionPro.classList.add('selected--pro');
+            } else {
+                optionTrucking.classList.add('selected--trucking');
+            }
+
+            updateSummary();
+            hideError();
+        }
+
+        function updateSummary() {
+            const p = PRODUCTS[selectedProduct];
+            const summaryProduct = document.getElementById('summary-product');
+            const summaryRegular = document.getElementById('summary-regular');
+            const summaryDiscount = document.getElementById('summary-discount');
+            const summaryTotal = document.getElementById('summary-total');
+            const btnText = document.getElementById('btn-text');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const taxNote = document.getElementById('tax-note');
+
+            summaryProduct.textContent = `${p.name} \u2014 ${p.subtitle}`;
+            summaryRegular.textContent = `$${p.regularPrice.toFixed(2)}`;
+            summaryDiscount.innerHTML = `&minus;$${p.savings.toFixed(2)} (${p.discount}%)`;
+            summaryTotal.textContent = `$${p.foundingPrice.toFixed(2)}${p.period === '/year' ? '/yr' : ''}`;
+            btnText.textContent = `Proceed to Secure Checkout \u2014 $${p.foundingPrice.toFixed(2)}${p.period === '/year' ? '/yr' : ''}`;
+
+            // Update button style
+            checkoutBtn.className = `checkout-btn ${p.btnClass}`;
+
+            // Tax note
+            if (p.taxDeductible) {
+                taxNote.classList.remove('hidden');
+            } else {
+                taxNote.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+
+        function hideError() {
+            document.getElementById('error-msg').classList.remove('show');
+        }
+
+        // ============================================================
+        // STRIPE CHECKOUT
+        // ============================================================
+        async function handleCheckout() {
+            const btn = document.getElementById('checkout-btn');
+            const p = PRODUCTS[selectedProduct];
+
+            // Validate Stripe key is configured
+            if (STRIPE_PUBLISHABLE_KEY.includes('XXXX')) {
+                showError('Stripe is not configured yet. Please add your Stripe publishable key and price IDs to checkout.html. See the setup notice above.');
+                return;
+            }
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+            hideError();
+
+            try {
+                const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+                // Redirect to Stripe Checkout
+                const { error } = await stripe.redirectToCheckout({
+                    lineItems: [{ price: p.priceId, quantity: 1 }],
+                    mode: p.mode,
+                    successUrl: window.location.origin + `/success.html?product=${selectedProduct}&session_id={CHECKOUT_SESSION_ID}`,
+                    cancelUrl: window.location.origin + `/checkout.html?product=${selectedProduct}`,
+                    billingAddressCollection: 'auto',
+                    allowPromotionCodes: true
+                });
+
+                if (error) {
+                    showError(error.message || 'Something went wrong. Please try again.');
+                }
+            } catch (err) {
+                showError('Unable to connect to payment processor. Please check your connection and try again.');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        selectProduct(selectedProduct);
+    </script>
+</body>
+</html>
