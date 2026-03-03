@@ -271,23 +271,6 @@
         }
         .error-msg.show { display: block; }
 
-        /* Stripe config notice */
-        .config-notice {
-            background: rgba(0,180,216,.06); border: 1px solid rgba(0,180,216,.15);
-            border-radius: var(--radius-md); padding: 20px 24px;
-            margin-bottom: 24px;
-        }
-        .config-notice h3 {
-            font-size: 15px; font-weight: 700; color: var(--teal-dark); margin-bottom: 8px;
-        }
-        .config-notice p {
-            font-size: 13px; color: var(--gray-600); line-height: 1.6;
-        }
-        .config-notice code {
-            background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 4px;
-            font-size: 12px;
-        }
-
         /* Footer */
         .checkout-footer {
             text-align: center; padding: 40px 24px;
@@ -322,17 +305,6 @@
         <div class="checkout-header">
             <h1>Choose your plan</h1>
             <p>Select a product below and proceed to secure checkout powered by Stripe.</p>
-        </div>
-
-        <!-- Stripe setup notice (remove once Stripe keys are configured) -->
-        <div class="config-notice" id="config-notice">
-            <h3>Stripe Setup Required</h3>
-            <p>
-                To activate payments, replace the placeholder values in this file's <code>&lt;script&gt;</code> section:<br>
-                1. Set your <code>STRIPE_PUBLISHABLE_KEY</code> (from Stripe Dashboard &rarr; API keys)<br>
-                2. Set the <code>priceId</code> for each product (from Stripe Dashboard &rarr; Products &rarr; Price ID)<br>
-                3. Remove this notice block once configured.
-            </p>
         </div>
 
         <!-- Error message -->
@@ -432,13 +404,13 @@
         // STRIPE CONFIGURATION
         // Replace these with your actual Stripe keys and price IDs
         // ============================================================
-        const STRIPE_PUBLISHABLE_KEY = 'pk_test_XXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Stripe publishable key
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51T6jgK5Y2Ru4tMslymc2kslulDnsPqZPce9PWweUWE8W2V7Edeselsi2QwfUkTiXUF0JbdxAEM2yd7TCkUv4Nlic00oL2dtQGd';
 
         const PRODUCTS = {
             pro: {
                 name: 'BalanceBooks Pro',
                 subtitle: 'Lifetime License',
-                priceId: 'price_XXXXXXXXXXXXXXXX',     // Replace with Stripe Price ID for Pro ($29.99 one-time)
+                priceId: 'prod_U4tkPV6FEk0vga',
                 regularPrice: 49.99,
                 foundingPrice: 29.99,
                 discount: 40,
@@ -451,7 +423,7 @@
             trucking: {
                 name: 'BalanceBooks Trucking',
                 subtitle: 'Annual Subscription',
-                priceId: 'price_XXXXXXXXXXXXXXXX',     // Replace with Stripe Price ID for Trucking ($49.99/yr)
+                priceId: 'prod_U4tgrOoigpaFRW',
                 regularPrice: 79.99,
                 foundingPrice: 49.99,
                 discount: 37,
@@ -541,12 +513,6 @@
         async function handleCheckout() {
             const btn = document.getElementById('checkout-btn');
             const p = PRODUCTS[selectedProduct];
-
-            // Validate Stripe key is configured
-            if (STRIPE_PUBLISHABLE_KEY.includes('XXXX')) {
-                showError('Stripe is not configured yet. Please add your Stripe publishable key and price IDs to checkout.html. See the setup notice above.');
-                return;
-            }
 
             btn.classList.add('loading');
             btn.disabled = true;
