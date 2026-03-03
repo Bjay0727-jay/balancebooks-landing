@@ -14,8 +14,8 @@
         :root {
             --navy-dark: #0f172a;
             --navy: #1e3a5f;
-            --teal: #14b8a6;
-            --teal-dark: #0d9488;
+            --teal: #00b4d8;
+            --teal-dark: #0096b7;
             --light-gray: #64748b;
             --white: #ffffff;
         }
@@ -342,19 +342,13 @@
     <section class="hero">
         <svg class="hero-logo" viewBox="0 0 100 100">
             <defs>
-                <linearGradient id="navyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#1e3a5f" />
-                    <stop offset="100%" style="stop-color:#0f172a" />
-                </linearGradient>
-                <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#14b8a6" />
-                    <stop offset="100%" style="stop-color:#0d9488" />
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#00b4d8"/>
+                    <stop offset="100%" stop-color="#0096b7"/>
                 </linearGradient>
             </defs>
-            <path d="M 50 5 L 92 18 L 92 55 C 92 78 73 92 50 98 C 27 92 8 78 8 55 L 8 18 Z" fill="url(#navyGrad)"/>
-            <path d="M 50 14 L 82 24 L 82 54 C 82 72 67 83 50 88 C 33 83 18 72 18 54 L 18 24 Z" fill="none" stroke="url(#tealGrad)" stroke-width="3"/>
-            <circle cx="50" cy="52" r="24" fill="url(#tealGrad)"/>
-            <path d="M 36 52 L 46 62 L 66 42" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect width="100" height="100" rx="24" fill="url(#logoGrad)"/>
+            <path d="M25 50h50M50 25v50M31 37.5h38M31 62.5h38" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
         </svg>
         <h1>Download <span>BalanceBooks Pro</span></h1>
         <p>Choose your platform and start managing your finances in minutes. No account required.</p>
